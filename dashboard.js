@@ -8,7 +8,7 @@ function initWebPage(){
 function initMap(){
 	console.log("initMap");
 	
-	var map = L.map('map').setView([-3.702829, 32.775559], 8); 
+	var map = L.map('map').setView([52.198373, -1.352455], 8); 
 
 	var openstreetmap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
 		maxZoom: 19, attribution: 'OSM', id: 'OSM Base Maps' 	});
