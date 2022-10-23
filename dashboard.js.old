@@ -8,10 +8,9 @@ function initWebPage(){
 function initMap(){
 	console.log("initMap");
 	
-	var map = L.map('map').setView([-3.702829, 32.775559], 8); 
+	var map = L.map('map').setView([52.198373, -1.352455], 8); 
 
-	var openstreetmap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { 
-		maxZoom: 19, attribution: 'OSM', id: 'OSM Base Maps' 	});
+	var openstreetmap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: 'OSM', id: 'OSM Base Maps' 	});
 	
 	var WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
 		attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community' 	});
@@ -21,16 +20,17 @@ function initMap(){
     minZoom: 1, maxZoom: 19, attribution: '(c) <a href="https://microsites.digitalglobe.com/interactive/basemap_vivid/">DigitalGlobe</a> , (c) OpenStreetMap, (c) Mapbox'
 	});
 	
+	var CartoDB_DarkMatter = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',	subdomains: 'abcd',	maxZoom: 19	});
 
-	var CartoDB_DarkMatter = L.tileLayer('http://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}.png', {
-	attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-	subdomains: 'abcd',
-	maxZoom: 19
+	var Esri_WorldTopoMap = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}', {
+	attribution: 'Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
 	});
-
-
 	
 	//All wards map
+
+//------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 	var info = L.control({position: 'bottomleft'});
 
@@ -41,27 +41,27 @@ function initMap(){
 		};
 
 		info.update = function (props) {
-			this._div.innerHTML = '<h4>Socioeconomic data by ward</h4>' +  (props ?
-				'Ward name: ' + '<b>' + props.Ward_Name + '</b><br/>' + 'Region: ' + props.Region_Nam + '</b><br />' + 'District: ' + props.District_N + '</b><br/>' + 'Area in sq. km: ' + props.Area + '</b><br/>' + 'Post code: ' + props.PCode + '</b><br/>' + 'Total population: ' + props.total_both + '</b><br/>' + 'Total population - male: ' + props.total_male + '</b><br/>' + 'Total population - female: ' + props.total_fema + '</b><br/>' + 'Population density: ' + props.Pop_Den + '</b><br />' + 'Ward Type: ' + props.ward_type
-				: 'Turn on census data and move the mouse over the ward');
+			this._div.innerHTML = '<h4>Green Depr England LSOA and Constituencies</h4>' +  (props ?
+				'LSOA name: ' + '<b>' + props.LSOA11NM + '</b><br/>' + 'LSOA CODE: ' + props.LSOA11CD + '</b><br />' + 'Region name: ' + props.Region_nam + '</b><br/>' + 'County name: ' + props.County_nam + '</b><br/>' + 'Population: ' + props.TotPop + '</b><br/>' + 'Index of Multiple Deprivation Rank: ' + props.IMDRank0 + '</b><br/>' + 'Green Deprivation Index: ' + props.TotDEPR + '</b><br/>' + 'Average distance from closest park: ' + props.Average_di + '</b><br/>' + 'For provision of green space: ' + props.For_provis
+				: 'Turn on census data and move the mouse over the LSOA');
 		};
 
 		info.addTo(map);
 
 		
 	function PopDensColor(d) {
-			return d > 500 ? '#990000' :
-			       d > 250 ? '#d7301f' :
-			       d > 100 ? '#ef6548' :
-			       d > 50 ? '#fc8d59' :
-			       d > 25 ? '#fdbb84' :
-			       d > 10 ? '#fdd49e' :
+			return d < 10 ? '#990000' :
+			       d < 20 ? '#d7301f' :
+			       d < 30 ? '#ef6548' :
+			       d < 40 ? '#fc8d59' :
+			       d < 60 ? '#fdbb84' :
+			       d < 80 ? '#fdd49e' :
 				   			'#fef0d9'; 	
 		}
 
 	function Allwardsstyle(feature) {						
 			return {
-				fillColor: PopDensColor((feature.properties.Pop_Den)),
+				fillColor: PopDensColor((feature.properties.TotDEPR)),
 				weight: 0.5, opacity: 1, color: 'black', fillOpacity: 0.35 };
 		}
 
@@ -74,7 +74,6 @@ function initMap(){
 			       d > 5000 ? '#c6dbef' :
 				   			'#eff3ff'; 	
 		}
-
 	
 
 
@@ -113,7 +112,7 @@ function initMap(){
 		}
 
 		
-	Allwards = L.esri.featureLayer({ url: 'http://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/TNZ_ward_pop2012/FeatureServer/0/', style: Allwardsstyle, onEachFeature: onEachFeature  });
+	Allwards = L.esri.featureLayer({ url: 'https://services7.arcgis.com/PlzZ51ukmuS0UkCo/arcgis/rest/services/Green_Depr_England_LSOA_and_Constituencies/FeatureServer/0/', style: Allwardsstyle, onEachFeature: onEachFeature  });
 
 	function ThighlightFeature(e) {
 			var layer = e.target;
@@ -137,16 +136,18 @@ function initMap(){
 			layer.on({ mouseover: ThighlightFeature, mouseout: TresetHighlight, click: TzoomToFeature });
 		}
 
-	Totalpop = L.esri.featureLayer({ url: 'http://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/TNZ_ward_pop2012/FeatureServer/0/', style: totalwardsstyle, onEachFeature: poponEachFeature  });
+	Totalpop = L.esri.featureLayer({ url: 'https://services7.arcgis.com/PlzZ51ukmuS0UkCo/arcgis/rest/services/Green_Depr_England_LSOA_and_Constituencies/FeatureServer/0/', style: totalwardsstyle, onEachFeature: poponEachFeature  });
 
-	//selected wards and popup
-	
+
+
+
+//selected wards and popup----------------------------------------------------------------------------------------------------
+
 	var MaraStyle = { "opacity": 0.75, "fillopacity": 0.75 };
 	var Marabuilding = L.tileLayer('https://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/Marabuilding_Density/MapServer/tile/{z}/{y}/{x}', {
 		style: MaraStyle, attribution: 'Tiles &copy; Esri &mdash; Source: Esri' });
 
 //------------------------------------------------------------------------------------------------------------------------------------
-
 
       function geoJson2heat(geojson, weight) {
           return geojson.features.map(function(feature) {
@@ -227,7 +228,7 @@ function initMap(){
 
 	//selected wards and popup
 	var greenStyle = { "color": "red", "weight": 1.5, "opacity": 0.95 };
-	var wards = L.esri.featureLayer({ url: 'http://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/Tanzania_selected_wards/FeatureServer/0/', style: greenStyle 	});
+	var wards = L.esri.featureLayer({ url: 'https://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/Tanzania_selected_wards/FeatureServer/0/', style: greenStyle 	});
 
 	wards.bindPopup(function (layer) {
     return L.Util.template('<p>Region name: <strong>{Region_Nam}</strong><br>District name: <strong>{District_N}</strong><br>Ward name: <strong>{Ward_Name}</strong><br><a href="http://www.fragosus.com/tanzania/dashboard/data/{Ward_Code}.kml" target="_blank">Download</a></p>', layer.feature.properties);   
@@ -238,7 +239,7 @@ function initMap(){
 
 	//Mapswipe tasks
 	var SwipeStyle = { "color": "#31a354", "weight": 2, "opacity": 0.95, "fillopacity": 1 };
-	var TanzaniaMapSwipe = L.esri.featureLayer({ url: '	http://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/TanzaniaMapSwipe/FeatureServer/0/', style: SwipeStyle 	});
+	var TanzaniaMapSwipe = L.esri.featureLayer({ url: '	https://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/TanzaniaMapSwipe/FeatureServer/0/', style: SwipeStyle 	});
 	
 	TanzaniaMapSwipe.bindPopup(function (layer) {
 		return L.Util.template('<p>MapSwipe project ID: <strong>{project_id}</strong><br>Progress: <strong>{progress}</strong> percent <br>Contributors: <strong>{contributo}</strong><br> Project name: <strong>{name}</strong> <br><br> <strong>GIScience MapSwipe Analytics</strong> <br> <a href="//mapswipe.geog.uni-heidelberg.de/?id={project_id}" target="_blank">Jump to the task dashboard</a> <br> <br>Download data <li><a href="//mapswipe.geog.uni-heidelberg.de/download/{project_id}/final_{project_id}.geojson" target="_blank">Processed results for HOT Tasking Manager</a></li><li><a href="//mapswipe.geog.uni-heidelberg.de/download/{project_id}/results_{project_id}.json" target="_blank">Results of the project including: User, cell, timestamp</a></li></p>', layer.feature.properties);   
@@ -259,7 +260,7 @@ function initMap(){
 
 	//Missing maps tasks visualisation
 	var DevelopmentTrust = { "color": "orange", "weight": 2, "opacity": 0.55 };
-	var TNZDevelopmentTrust = L.esri.featureLayer({ url: 'http://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/TNZ_Development_Trust_Missing_Maps_tasks/FeatureServer/0/', style: DevelopmentTrust 	});
+	var TNZDevelopmentTrust = L.esri.featureLayer({ url: 'https://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/TNZ_Development_Trust_Missing_Maps_tasks/FeatureServer/0/', style: DevelopmentTrust 	});
 
 	TNZDevelopmentTrust.bindPopup(function (layer) {
     return L.Util.template('<p>HOT OSM task number: <strong>{HOTcode}</strong><br>Number of buildings: <strong>{Buildings}</strong><br>Number of places: <strong>{places}</strong><br><a href="http://tasks.hotosm.org/project/{HOTcode}" target="_blank">Open on Tasking manager</a></p>', layer.feature.properties);   
@@ -462,7 +463,7 @@ function initMap(){
 
 	//Voronoi - water source 
 	var stylewatersource = { "color": "purple", "weight": 0.5, "opacity": 0.75 };
-	var watersourcePop = L.esri.featureLayer({ url: 'http://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/Pop%20for%20each%20water%20source%20-%20voronoi/FeatureServer/0/', style: stylewatersource 	});
+	var watersourcePop = L.esri.featureLayer({ url: 'https://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/Pop%20for%20each%20water%20source%20-%20voronoi/FeatureServer/0/', style: stylewatersource 	});
 
 	var labels = {};
 
@@ -529,7 +530,7 @@ function initMap(){
 		return { fillColor: PopDensColorSukuma((feature.properties.density)), weight: 0.5, opacity: 1, color: 'black', fillOpacity: 0.45 };
 		}
 
-	var Sukumadens = L.esri.featureLayer({ url: 'http://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/Sukuma%20weighted%20Density/FeatureServer/0/', style: styleSukumadens 	});
+	var Sukumadens = L.esri.featureLayer({ url: 'https://services6.arcgis.com/qnuLPzqZhawWzvJ1/arcgis/rest/services/Sukuma%20weighted%20Density/FeatureServer/0/', style: styleSukumadens 	});
 
 	// listen for when all features have been retrieved from the server
   Sukumadens.once("load", function(evt) {
@@ -554,13 +555,15 @@ function initMap(){
 	var imagerySet = "Aerial";
 	var	bing = L.tileLayer.bing(bing_key, {type: imagerySet});
 
+//-------------------------------------------------------------------------------------------------------------------------------
+
 	//Basemaps are added
-	// olda basamap with digitalglobe: var baseMaps = {"OpenStreetMap": openstreetmap, "DarkMatter": CartoDB_DarkMatter, "Bing map - Aerial": bing, "ESRI - Aerial": WorldImagery, "DigitalGlobe": digitalglobe };
-	var baseMaps = {"OpenStreetMap": openstreetmap, "DarkMatter": CartoDB_DarkMatter, "Bing map - Aerial": bing, "ESRI - Aerial": WorldImagery };
+	var baseMaps = {"OpenStreetMap": openstreetmap, "DarkMatter": CartoDB_DarkMatter, "Bing map - Aerial": bing, "ESRI - Aerial": WorldImagery, "Esri WorldTopoMap": Esri_WorldTopoMap };
 	
 	// Overlay layers are grouped
     var groupedOverlays = {
-        "Administrative divisions of Tanzania": {
+
+		"Administrative divisions of Tanzania": {
         "Tanzania Regions": TNZADM1,
 		"Tanzania Districts": TNZADM2
 		 },
@@ -679,7 +682,3 @@ var htmlObject = control.getContainer();
 var a = document.getElementById('layerselector');
 
 }
-
-
-		
-

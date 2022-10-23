@@ -8,7 +8,7 @@ function initWebPage(){
 function initMap(){
 	console.log("initMap");
 	
-	var map = L.map('map').setView([52.198373, -1.352455], 8); 
+	var map = L.map('map').setView([51.430051, -0.719897], 14); 
 
 	var openstreetmap = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: 'OSM', id: 'OSM Base Maps' 	});
 	
@@ -42,7 +42,7 @@ function initMap(){
 
 		info.update = function (props) {
 			this._div.innerHTML = '<h4>Green Depr England LSOA and Constituencies</h4>' +  (props ?
-				'LSOA name: ' + '<b>' + props.LSOA11NM + '</b><br/>' + 'LSOA CODE: ' + props.LSOA11CD + '</b><br />' + 'Region name: ' + props.Region_nam + '</b><br/>' + 'County name: ' + props.County_nam + '</b><br/>' + 'Population: ' + props.TotPop + '</b><br/>' + 'Index of Multiple Deprivation Rank: ' + props.IMDRank0 + '</b><br/>' + 'Green Deprivation Index: ' + props.TotDEPR + '</b><br/>' + 'Average distance from closest park: ' + props.Average_di + '</b><br/>' + 'For provision of green space (sqm / person): ' + props.For_provis
+				'LSOA name: ' + '<b>' + props.LSOA11NM + '</b><br/>' + 'LSOA CODE: ' + props.LSOA11CD + '</b><br />' + 'Region name: ' + props.Region_nam + '</b><br/>' + 'County name: ' + props.County_nam + '</b><br/>' + 'Population: ' + props.TotPop + '</b><br/>' + 'Index of Multiple Deprivation Rank: ' + props.IMDRank0 + '</b><br/>' + 'Green Deprivation Index: ' + props.TotDEPR + '</b><br/>' + 'Average distance from closest park: ' + props.Average_di + '</b><br/>' + 'For provision of green space: ' + props.For_provis
 				: 'Turn on census data and move the mouse over the LSOA');
 		};
 
@@ -66,12 +66,12 @@ function initMap(){
 		}
 
 		function totalColor(d) {
-			return d > 50000 ? '#084594' :
-			       d > 25000 ? '#2171b5' :
-			       d > 12500 ? '#4292c6' :
-			       d > 10000 ? '#6baed6' :
-			       d > 7500 ? '#9ecae1' :
-			       d > 5000 ? '#c6dbef' :
+			return d > 5000 ? '#084594' :
+			       d > 4000 ? '#2171b5' :
+			       d > 3000 ? '#4292c6' :
+			       d > 2000 ? '#6baed6' :
+			       d > 1100 ? '#9ecae1' :
+			       d > 500 ? '#c6dbef' :
 				   			'#eff3ff'; 	
 		}
 	
@@ -79,7 +79,7 @@ function initMap(){
 
 	function totalwardsstyle(feature) {						
 			return {
-				fillColor: totalColor((feature.properties.total_both)),
+				fillColor: totalColor((feature.properties.Population)),
 				weight: 0.5, opacity: 1, color: 'black', fillOpacity: 0.35 };
 		}
 
@@ -109,7 +109,7 @@ function initMap(){
 				mouseout: resetHighlight,
 				click: zoomToFeature
 			});
-		
+		}
 
 		
 	Allwards = L.esri.featureLayer({ url: 'https://services7.arcgis.com/PlzZ51ukmuS0UkCo/arcgis/rest/services/Green_Depr_England_LSOA_and_Constituencies/FeatureServer/0/', style: Allwardsstyle, onEachFeature: onEachFeature  });
@@ -149,59 +149,7 @@ function initMap(){
 
 //------------------------------------------------------------------------------------------------------------------------------------
 
-      function geoJson2heat(geojson, weight) {
-          return geojson.features.map(function(feature) {
-            return [
-              feature.geometry.coordinates[1],
-              feature.geometry.coordinates[0],
-              feature.properties[weight]
-            ];
-          });
-        }
-
-
-        function style_Kapcsoltrteg0_0(feature) {
-            if (feature.properties['count'] >= 1.000000 && feature.properties['count'] <= 65.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0', opacity: 1, color: 'rgba(0,0,0,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1.0, fillOpacity: 1, fillColor: 'rgba(240,249,33,0.101960784314)',}}
-            if (feature.properties['count'] >= 65.000000 && feature.properties['count'] <= 141.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0', opacity: 1, color: 'rgba(0,0,0,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1.0, fillOpacity: 1, fillColor: 'rgba(250,219,36,0.278431372549)',}}
-            if (feature.properties['count'] >= 141.000000 && feature.properties['count'] <= 216.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0', opacity: 1, color: 'rgba(0,0,0,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1.0, fillOpacity: 1, fillColor: 'rgba(254,188,43,0.466666666667)',}}
-            if (feature.properties['count'] >= 216.000000 && feature.properties['count'] <= 297.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0',opacity: 1,color: 'rgba(0,0,0,1.0)',dashArray: '',lineCap: 'butt',lineJoin: 'miter',weight: 1.0, fillOpacity: 1,fillColor: 'rgba(252,162,56,0.647058823529)',}}
-            if (feature.properties['count'] >= 297.000000 && feature.properties['count'] <= 387.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0',opacity: 1,color: 'rgba(0,0,0,1.0)',dashArray: '',lineCap: 'butt',lineJoin: 'miter',weight: 1.0, fillOpacity: 1,fillColor: 'rgba(244,136,73,0.83137254902)',}}
-            if (feature.properties['count'] >= 387.000000 && feature.properties['count'] <= 489.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0',opacity: 1,color: 'rgba(0,0,0,1.0)',dashArray: '',lineCap: 'butt',lineJoin: 'miter',weight: 1.0, fillOpacity: 1,fillColor: 'rgba(233,113,88,1.0)',}}
-            if (feature.properties['count'] >= 489.000000 && feature.properties['count'] <= 614.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0',opacity: 1,color: 'rgba(0,0,0,1.0)',dashArray: '',lineCap: 'butt',lineJoin: 'miter',weight: 1.0, fillOpacity: 1,fillColor: 'rgba(219,92,104,1.0)',}}
-            if (feature.properties['count'] >= 614.000000 && feature.properties['count'] <= 757.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0',opacity: 1,color: 'rgba(0,0,0,1.0)',dashArray: '',lineCap: 'butt',lineJoin: 'miter',weight: 1.0, fillOpacity: 1,fillColor: 'rgba(203,71,120,1.0)',}}
-            if (feature.properties['count'] >= 757.000000 && feature.properties['count'] <= 921.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0',opacity: 1,color: 'rgba(0,0,0,1.0)',dashArray: '',lineCap: 'butt',lineJoin: 'miter',weight: 1.0, fillOpacity: 1,fillColor: 'rgba(185,50,137,1.0)',}}
-            if (feature.properties['count'] >= 921.000000 && feature.properties['count'] <= 1153.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0',opacity: 1,color: 'rgba(0,0,0,1.0)',dashArray: '',lineCap: 'butt',lineJoin: 'miter',weight: 1.0, fillOpacity: 1,fillColor: 'rgba(163,30,153,1.0)',}}
-            if (feature.properties['count'] >= 1153.000000 && feature.properties['count'] <= 1517.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0',opacity: 1,color: 'rgba(0,0,0,1.0)',dashArray: '',lineCap: 'butt',lineJoin: 'miter',weight: 1.0, fillOpacity: 1,fillColor: 'rgba(139,9,165,1.0)',}}
-            if (feature.properties['count'] >= 1517.000000 && feature.properties['count'] <= 2090.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0',opacity: 1,color: 'rgba(0,0,0,1.0)',dashArray: '',lineCap: 'butt',lineJoin: 'miter',weight: 1.0, fillOpacity: 1,fillColor: 'rgba(112,0,168,1.0)',}}
-            if (feature.properties['count'] >= 2090.000000 && feature.properties['count'] <= 3122.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0',opacity: 1,color: 'rgba(0,0,0,1.0)',dashArray: '',lineCap: 'butt',lineJoin: 'miter',weight: 1.0, fillOpacity: 1,fillColor: 'rgba(83,1,164,1.0)',}}
-            if (feature.properties['count'] >= 3122.000000 && feature.properties['count'] <= 4596.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0', opacity: 1, color: 'rgba(0,0,0,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1.0,  fillOpacity: 1, fillColor: 'rgba(52,4,153,1.0)',}}
-            if (feature.properties['count'] >= 4596.000000 && feature.properties['count'] <= 5759.000000 ) {
-                return {pane: 'pane_Kapcsoltrteg0', opacity: 1, color: 'rgba(0,0,0,1.0)', dashArray: '', lineCap: 'butt', lineJoin: 'miter', weight: 1.0, fillOpacity: 1, fillColor: 'rgba(13,8,135,1.0)',}}
-        }
-        map.createPane('pane_Kapcsoltrteg0');
-        map.getPane('pane_Kapcsoltrteg0').style.zIndex = 400;
-        map.getPane('pane_Kapcsoltrteg0').style['mix-blend-mode'] = 'normal';
-    var layer_Kapcsoltrteg0 = new L.geoJson(json_Kapcsoltrteg0, {
-        attribution: '<a href=""></a>',
-        pane: 'pane_Kapcsoltrteg0',
-        style: style_Kapcsoltrteg0_0,
-    });
-
-
+var PropertyBoundaries = L.tileLayer('https://tiles.osmuk.org/PropertyBoundaries/{zoom}/{x}/{y}.png', { maxZoom: 20	});
 
 //------------------------------------------------------------------------------------------------------------------------------------		
 
@@ -562,58 +510,21 @@ function initMap(){
 	
 	// Overlay layers are grouped
     var groupedOverlays = {
-        "Administrative divisions of UK": {
-			"Middle Layer Super Output Areas": MSOA,
-			"Lower Layer Super Output Area": LSOA,
-			"Output Areas": OA
-			 },
-		"Land Registry": {
-				"Land Registry Cadastral Parcels": LRCP,
-				"Lower Layer Super Output Area": LSOA
-				
-				 },
-			
 
-			 
-
-		
-		"Administrative divisions of Tanzania": {
-        "Tanzania Regions": TNZADM1,
-		"Tanzania Districts": TNZADM2
+	"Administrative divisions of UK": {
+        "MSOA": TNZADM1,
+		"LSOA": TNZADM2
 		 },
-		"Socioeconomic data - ward level": {
-        "Population density": Allwards,
+	"Green Depr England LSOA": {
+        "Green deprivation index": Allwards,
 		"Total population": Totalpop
 		 },
-        "Crowdsourced data": {
-		  "CrowdAI test data - Ihanja ward": crowdai, 
-		  "Field papers": TNZFieldpaper,
-		  "Mapswipe tasks in Tanzania": TanzaniaMapSwipe,
-		  "Selected wards": wards,
-		  "Missing Maps tasks - Tanzania Development Trust": TNZDevelopmentTrust,
-		  "Missing Maps tasks - PEPFAR project": TNZmaholi, 
-		  "Missing Maps tasks - Tanzania Mini-Grids project": TNZMinigrids,
-		  ' FGM last season <br /> Legend: Total cases<table><tr><td style="text-align: center;"><img src="legend/FGMfeb170_1250.png" /></td><td> 1 - 25 </td></tr><tr><td style="text-align: center;"><img src="legend/FGMfeb170_25501.png" /></td><td> 25 - 50 </td></tr><tr><td style="text-align: center;"><img src="legend/FGMfeb170_50752.png" /></td><td> 50 - 75 </td></tr><tr><td style="text-align: center;"><img src="legend/FGMfeb170_751003.png" /></td><td> 75 - 100 </td></tr><tr><td style="text-align: center;"><img src="legend/FGMfeb170_1001504.png" /></td><td> 100 - 150 </td></tr><tr><td style="text-align: center;"><img src="legend/FGMfeb170_1502005.png" /></td><td> 150 - 200 </td></tr><tr><td style="text-align: center;"><img src="legend/FGMfeb170_2002506.png" /></td><td> 200 - 250 </td></tr><tr><td style="text-align: center;"><img src="legend/FGMfeb170_2507.png" /></td><td> 250 - </td></tr></table>': layer_FGMfeb170
-		},
-		"OSM building distribution - Mara region": {
-		  "Mara region OSM building density": Marabuilding,
-		  "Mara region OSM building grid": layer_Kapcsoltrteg0
-		},
-		"Education and health data (based on OSM)":{
-		' <img src="legend/hospital.png" /> Hospitals in Tanzania' : cluster_hospital,
-		' <img src="legend/school.png" /> Schools in Tanzania' : cluster_school,
-		' <img src="legend/clinic.png" /> Clinics in Tanzania' : clusterclinic
-		},
-		"MapSwipe data analysis for Sukuma ward":{
-		"Pop for each water source - Voronoi tessellation": watersourcePop,
-		"Population density": Sukumadens		
+	"Land Registry Cadastral Parcels":{
+		"SOA": watersourcePop,
+		"Property Boundaries": PropertyBoundaries
 		}
       };
 
-	//var options = {
-      // Make the "Landmarks" group exclusive (use radio inputs)
-//      exclusiveGroups: ["Socioeconomic data"]  
-  //    };
 
 
 
@@ -696,7 +607,4 @@ var htmlObject = control.getContainer();
 var a = document.getElementById('layerselector');
 
 }
-
-
-		
 
